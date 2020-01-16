@@ -7,7 +7,7 @@ int main(){
   newStretchBloc(&a,1);
   printlnDashedStretchBloc(&a);
   int c;
-  for(c=0;c<100;++c){
+  for(c=0;c<1000;++c){
 	stretchBlocLeftShiftOne(&b,&a);
 	printlnDashedStretchBloc(&b);
 	deleteStretchBloc(&a);
