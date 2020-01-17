@@ -13,6 +13,12 @@ int main(){
 	deleteStretchBloc(&a);
 	a=b;
   }
+  for(c=0;c<1000;++c){
+	stretchBlocRightShiftOne(&b,&a);
+	printlnDashedStretchBloc(&b);
+	deleteStretchBloc(&a);
+	a=b;
+  }
   deleteStretchBloc(&a);
 }
 

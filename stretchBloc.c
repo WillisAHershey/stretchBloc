@@ -305,10 +305,9 @@ int stretchBlocLeftShiftOne(stretchBloc_t *dest,stretchBloc_t *in){
 		return STRETCHBLOC_FAILURE;
 	dest->data[len]=(longtype)1;
   }
-  else{
+  else
   	if(mallocStretchBloc(dest,len)==STRETCHBLOC_FAILURE)
 		return STRETCHBLOC_FAILURE;
-  }
   size_t c;
   longtype hold=0;
   for(c=0;c<len;++c){
@@ -319,7 +318,22 @@ int stretchBlocLeftShiftOne(stretchBloc_t *dest,stretchBloc_t *in){
 }
 
 int stretchBlocRightShiftOne(stretchBloc_t *dest,stretchBloc_t *in){
-  return 0;
+  size_t len=usedSpace(in);
+  if(!len)
+	return STRETCHBLOC_FAILURE;
+  longtype mask=((longtype)1)<<(longbits-1);
+  longtype hold=0;
+  if(in->data[len-1]==(longtype)1){
+	--len;
+	hold=mask;
+  }
+  if(mallocStretchBloc(dest,len)==STRETCHBLOC_FAILURE)
+	return STRETCHBLOC_FAILURE;
+  for(--len;len!=size_t_max;--len){
+	dest->data[len]=(in->data[len]>>1)|hold;
+	hold=in->data[len]&(longtype)1?mask:0;
+  }
+  return STRETCHBLOC_SUCCESS;
 }
 
 int stretchBlocLeftShift(stretchBloc_t *dest,stretchBloc_t *in,size_t shamt){
