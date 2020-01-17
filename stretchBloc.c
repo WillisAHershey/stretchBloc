@@ -348,13 +348,61 @@ int stretchBlocRightShift(stretchBloc_t *dest,stretchBloc_t *in,size_t shamt){
   return 0;
 }
 int stretchBlocAnd(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
-  return 0;
+  size_t alen=usedSpace(a);
+  size_t blen=usedSpace(b);
+  if(!alen||!blen)
+	return STRETCHBLOC_FAILURE;
+  size_t olen=alen<=blen?alen:blen;
+  if(mallocStretchBloc(dest,olen)==STRETCHBLOC_FAILURE)
+	return STRETCHBLOC_FAILURE;
+  size_t c;
+  for(c=0;c<olen;++c)
+	dest->data[c]=a->data[c]&b->data[c];
+  return STRETCHBLOC_SUCCESS;
 }
-int stretchBlocOr(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
-  return 0;
+int stretchBlocOr(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){ 
+  size_t alen=usedSpace(a);
+  size_t blen=usedSpace(b);
+  if(!alen||!blen)
+	return STRETCHBLOC_FAILURE;
+  size_t olen=alen>=blen?alen:blen;
+  size_t slen=alen>=blen?blen:alen;
+  if(mallocStretchBloc(dest,olen)==STRETCHBLOC_FAILURE)
+	return STRETCHBLOC_FAILURE;
+  size_t c;
+  for(c=0;c<slen;++c)
+	dest->data[c]=a->data[c]|b->data[c];
+  if(c==olen)
+	;
+  else if(c==alen)
+	for(;c<blen;++c)
+		dest->data[c]=b->data[c];
+  else
+	for(;c<alen;++c)
+		dest->data[c]=a->data[c];
+  return STRETCHBLOC_SUCCESS;
 }
 int stretchBlocXor(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
-  return 0;
+  size_t alen=usedSpace(a);
+  size_t blen=usedSpace(b);
+  if(!alen||!blen)
+	return STRETCHBLOC_FAILURE;
+  size_t olen=alen>=blen?alen:blen;
+  size_t slen=alen>=blen?blen:alen;
+  if(mallocStretchBloc(dest,olen)==STRETCHBLOC_FAILURE)
+	return STRETCHBLOC_FAILURE;
+  size_t c;
+  for(c=0;c<slen;++c)
+	dest->data[c]=a->data[c]^b->data[c];
+  if(c==olen)
+	;
+  else if(c==alen)
+	for(;c<blen;++c)
+		dest->data[c]=b->data[c];
+  else
+	for(;c<alen;++c)
+		dest->data[c]=a->data[c];
+  return STRETCHBLOC_SUCCESS;
 }
 int stretchBlocPower(stretchBloc_t *dest,stretchBloc_t *in,size_t pow){
   return 0;
@@ -379,8 +427,20 @@ int stretchBlocPlusPlus(stretchBloc_t *in){
 }
 
 int stretchBlocMinusMinus(stretchBloc_t *in){
-  return 0;
+  if(!stretchBlocTest(in))
+	return STRETCHBLOC_FAILURE;
+  if(in->data[0]--)
+	return STRETCHBLOC_SUCCESS;
+  size_t len=usedSpace(in);
+  size_t c;
+  for(c=1;c<len;++c)
+	if(in->data[c]--)
+		break;
+  if(!in->data[len-1])
+	return reallocStretchBloc(in,len-1);
+  return STRETCHBLOC_SUCCESS;
 }
+
 int stretchBlocPlusEquals(stretchBloc_t *a,stretchBloc_t *b){
   return 0;
 }
