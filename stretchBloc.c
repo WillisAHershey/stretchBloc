@@ -22,22 +22,27 @@ inline int mallocStretchBloc(stretchBloc_t *dest,size_t in){
   longtype *pt=(longtype*)malloc(in*longbytes);
   if(!pt)
 	return STRETCHBLOC_FAILURE;
-  dest->data=pt;
   size_t len=malloc_usable_size(pt)/longbytes;
   for(;in<len;++in)
 	pt[in]=0;
+  dest->data=pt;
   return STRETCHBLOC_SUCCESS;
 }
 
 inline int reallocStretchBloc(stretchBloc_t *in,size_t size){
   size_t oldLen=blocLength(in);
-  if(!size||!oldLen||size==oldLen)
+  if(!size||!oldLen)
 	return STRETCHBLOC_FAILURE;
-  in->data=(longtype*)realloc(in->data,size*longbytes);
-  size_t newLen=blocLength(in);
+  if(size==oldLen)
+	return STRETCHBLOC_SUCCESS;
+  longtype *pt=(longtype*)realloc(in->data,size*longbytes);
+  if(!pt)
+	return STRETCHBLOC_FAILURE;
+  size_t newLen=malloc_usable_size(pt)/longbytes;
   size_t c;
   for(c=size;c<newLen;++c)
-	in->data[c]=0;
+	pt[c]=0;
+  in->data=pt;
   return STRETCHBLOC_SUCCESS;
 }
 
