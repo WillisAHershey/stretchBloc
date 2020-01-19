@@ -1,24 +1,23 @@
 #include "stretchBloc.h"
 
-#define NUM 12
+#define NUM 10
 
 int main(){
-  stretchBloc_t a,b;
-  newStretchBloc(&a,1);
-  printlnDashedStretchBloc(&a);
-  int c;
-  for(c=0;c<1000;++c){
+  stretchBloc_t a,b,c;
+  int i;
+  for(i=0;i<100000;++i){
+	randomStretchBloc(&a,NUM);
 	stretchBlocLeftShiftOne(&b,&a);
+	stretchBlocRightShiftOne(&c,&b);
+	printlnDashedStretchBloc(&a);
 	printlnDashedStretchBloc(&b);
+	printlnDashedStretchBloc(&c);
+	if(stretchBlocNotEqual(&a,&c))
+		exit(EXIT_FAILURE);
 	deleteStretchBloc(&a);
-	a=b;
+	deleteStretchBloc(&b);
+	deleteStretchBloc(&c);
   }
-  for(c=0;c<1000;++c){
-	stretchBlocRightShiftOne(&b,&a);
-	printlnDashedStretchBloc(&b);
-	deleteStretchBloc(&a);
-	a=b;
-  }
-  deleteStretchBloc(&a);
+  exit(EXIT_SUCCESS);
 }
 

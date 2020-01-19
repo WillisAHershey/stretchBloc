@@ -442,7 +442,43 @@ int stretchBlocMinusMinus(stretchBloc_t *in){
 }
 
 int stretchBlocPlusEquals(stretchBloc_t *a,stretchBloc_t *b){
-  return 0;
+  size_t alen=blocLength(a); //We're concerned with the whole size of a
+  size_t blen=usedSpace(b); //But only the utilized portion of b
+  if(!alen||!blen)
+	return STRETCHBLOC_FAILURE;
+  size_t slen;
+  if(blen>alen){ //No matter what, make sure a has the capacity to hold the same amount of data as b, but slen will tell us if a was resized
+	if(reallocStretchBloc(a,blen)==STRETCHBLOC_FAILURE)
+		return STRETCHBLOC_FAILURE;
+	slen=alen;
+	alen=blocLength(a);
+  }
+  else
+	slen=blen;
+  longtype carry=0;
+  size_t c;
+  for(c=0;c<slen;++c){ //Do the heavywork of addition until the smaller of the two values
+	a->data[c]=a->data[c]+b->data[c]+carry;
+	carry=(longtype)(a->data[c]<b->data[c]||(carry&&a->data[c]==b->data[c]));
+  }
+  if(c==blen) //If a was not resized, and there's potentially plenty of data up there
+	for(;carry&&c<alen;++c) //While carry
+		carry=(longtype)(++a->data[c]==0); //Plusplus every longtype
+  else{ //Otherwise if a was resized, and we've reached the part where a is topped with zeroes
+	for(;carry&&c<blen;++c){
+		a->data[c]=b->data[c]+1;
+		carry=(longtype)!a->data[c];
+	}
+	for(;c<blen;++c)
+		a->data[c]=b->data[c];
+  }
+  if(carry){
+	if(c==alen)
+		if(reallocStretchBloc(a,alen+1)==STRETCHBLOC_FAILURE)
+			return STRETCHBLOC_FAILURE;
+	a->data[c]=(longtype)1;
+  }
+  return STRETCHBLOC_SUCCESS;
 }
 int stretchBlocMinusEquals(stretchBloc_t *a,stretchBloc_t *b){
   return 0;

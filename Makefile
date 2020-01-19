@@ -6,3 +6,10 @@ stretchBloc.o: stretchBloc.h stretchBloc.c
 
 clean:
 	rm stretchBloc.o
+
+.PHONY: debug
+
+debug: stretchBloc.h stretchBloc.c
+	gcc -o stretchBloc.o -Wall -O0 -g -c stretchBloc.c
+
+
