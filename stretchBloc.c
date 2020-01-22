@@ -53,7 +53,7 @@ int stretchBlocInit(stretchBloc_t *dest){
   return STRETCHBLOC_SUCCESS;  
 }
 
-int copyStretchBloc(stretchBloc_t *dest,stretchBloc_t *in){
+int copyStretchBloc(stretchBloc_t *dest,stretchBloc_t *in){ //Perhaps use memcopy?
   size_t len=usedSpace(in);
   if(!len||!dest||mallocStretchBloc(dest,len)==STRETCHBLOC_FAILURE)
 	return STRETCHBLOC_FAILURE;
