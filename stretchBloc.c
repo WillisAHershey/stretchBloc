@@ -23,8 +23,7 @@ inline int mallocStretchBloc(stretchBloc_t *dest,size_t in){
   if(!pt)
 	return STRETCHBLOC_FAILURE;
   size_t len=malloc_usable_size(pt)/longbytes;
-  for(;in<len;++in)
-	pt[in]=0;
+  memset(&pt[in],0,(len-in)*longbytes);
   dest->data=pt;
   return STRETCHBLOC_SUCCESS;
 }
@@ -39,9 +38,7 @@ inline int reallocStretchBloc(stretchBloc_t *in,size_t size){
   if(!pt)
 	return STRETCHBLOC_FAILURE;
   size_t newLen=malloc_usable_size(pt)/longbytes;
-  size_t c;
-  for(c=size;c<newLen;++c)
-	pt[c]=0;
+  memset(&pt[size],0,(newLen-size)*longbytes);
   in->data=pt;
   return STRETCHBLOC_SUCCESS;
 }
@@ -53,13 +50,11 @@ int stretchBlocInit(stretchBloc_t *dest){
   return STRETCHBLOC_SUCCESS;  
 }
 
-int copyStretchBloc(stretchBloc_t *dest,stretchBloc_t *in){ //Perhaps use memcopy?
+int copyStretchBloc(stretchBloc_t *dest,stretchBloc_t *in){
   size_t len=usedSpace(in);
   if(!len||!dest||mallocStretchBloc(dest,len)==STRETCHBLOC_FAILURE)
 	return STRETCHBLOC_FAILURE;
-  size_t c;
-  for(c=0;c<len;++c)
-	dest->data[c]=in->data[c];
+  memcpy(dest->data,in->data,len*longbytes);
   return STRETCHBLOC_SUCCESS;
 }
 
