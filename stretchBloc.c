@@ -339,9 +339,11 @@ int stretchBlocRightShiftOne(stretchBloc_t *dest,stretchBloc_t *in){
 int stretchBlocLeftShift(stretchBloc_t *dest,stretchBloc_t *in,size_t shamt){
   return 0;
 }
+
 int stretchBlocRightShift(stretchBloc_t *dest,stretchBloc_t *in,size_t shamt){
   return 0;
 }
+
 int stretchBlocAnd(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
   size_t alen=usedSpace(a);
   size_t blen=usedSpace(b);
@@ -355,6 +357,7 @@ int stretchBlocAnd(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
 	dest->data[c]=a->data[c]&b->data[c];
   return STRETCHBLOC_SUCCESS;
 }
+
 int stretchBlocOr(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){ 
   size_t alen=usedSpace(a);
   size_t blen=usedSpace(b);
@@ -377,6 +380,7 @@ int stretchBlocOr(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
 		dest->data[c]=a->data[c];
   return STRETCHBLOC_SUCCESS;
 }
+
 int stretchBlocXor(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
   size_t alen=usedSpace(a);
   size_t blen=usedSpace(b);
@@ -399,9 +403,11 @@ int stretchBlocXor(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
 		dest->data[c]=a->data[c];
   return STRETCHBLOC_SUCCESS;
 }
+
 int stretchBlocPower(stretchBloc_t *dest,stretchBloc_t *in,size_t pow){
   return 0;
 }
+
 int stretchBlocPOWER(stretchBloc_t *dest,stretchBloc_t *in,stretchBloc_t *pow){
   return 0;
 }
@@ -475,42 +481,55 @@ int stretchBlocPlusEquals(stretchBloc_t *a,stretchBloc_t *b){
   }
   return STRETCHBLOC_SUCCESS;
 }
+
 int stretchBlocMinusEquals(stretchBloc_t *a,stretchBloc_t *b){
   return 0;
 }
+
 int stretchBlocTimesEquals(stretchBloc_t *a,stretchBloc_t *b){
   return 0;
 }
+
 int stretchBlocDividedByEquals(stretchBloc_t *a,stretchBloc_t *b,stretchBloc_t *rem){
   return 0;
 }
+
 int stretchBlocRemainderEquals(stretchBloc_t *a,stretchBloc_t *b,stretchBloc_t *quo){
   return 0;
 }
+
 int stretchBlocLeftShiftEqualsOne(stretchBloc_t *in){
   return 0;
 }
+
 int stretchBlocRightShiftEqualsOne(stretchBloc_t *in){
   return 0;
 }
+
 int stretchBlocLeftShiftEquals(stretchBloc_t *in,size_t shamt){
   return 0;
 }
+
 int stretchBlocRightShiftEquals(stretchBloc_t *in,size_t shamt){
   return 0;
 }
+
 int stretchBlocAndEquals(stretchBloc_t *a,stretchBloc_t *b){
   return 0;
 }
+
 int stretchBlocOrEquals(stretchBloc_t *a,stretchBloc_t *b){
   return 0;
 }
+
 int stretchBlocXorEquals(stretchBloc_t *a,stretchBloc_t *b){
-  return 0;
+ return 0;
 }
+
 int stretchBlocPowerEquals(stretchBloc_t *in,size_t pow){
   return 0;
 }
+
 int stretchBlocPOWEREquals(stretchBloc_t *in,stretchBloc_t *pow){
   return 0;
 }
