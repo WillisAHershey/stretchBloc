@@ -1,12 +1,12 @@
 #include "stretchBloc.h"
 
-inline size_t blocLength(stretchBloc_t *in){
+inline size_t blocLength(const stretchBloc_t *in){
   if(!in||!in->data)
 	return 0;
   return malloc_usable_size(in->data)/longbytes;
 }
 
-inline size_t usedSpace(stretchBloc_t *in){
+inline size_t usedSpace(const stretchBloc_t *in){
   size_t len=blocLength(in);
   if(!len)
 	return 0;
@@ -50,7 +50,7 @@ int stretchBlocInit(stretchBloc_t *dest){
   return STRETCHBLOC_SUCCESS;  
 }
 
-int copyStretchBloc(stretchBloc_t *dest,stretchBloc_t *in){
+int copyStretchBloc(stretchBloc_t *dest,const stretchBloc_t *in){
   size_t len=usedSpace(in);
   if(!len||!dest||mallocStretchBloc(dest,len)==STRETCHBLOC_FAILURE)
 	return STRETCHBLOC_FAILURE;
@@ -93,7 +93,7 @@ int deleteStretchBloc(stretchBloc_t *in){
   return STRETCHBLOC_SUCCESS;
 }
 
-int printStretchBloc(stretchBloc_t *in){
+int printStretchBloc(const stretchBloc_t *in){
   size_t len=usedSpace(in);
   if(!len)
 	return STRETCHBLOC_FAILURE;
@@ -103,14 +103,14 @@ int printStretchBloc(stretchBloc_t *in){
   return STRETCHBLOC_SUCCESS;
 }
 
-int printlnStretchBloc(stretchBloc_t *in){
+int printlnStretchBloc(const stretchBloc_t *in){
   int c=printStretchBloc(in);
   if(c==STRETCHBLOC_SUCCESS)
 	printf("\n");
   return c;
 }
 
-int printDashedStretchBloc(stretchBloc_t *in){
+int printDashedStretchBloc(const stretchBloc_t *in){
   size_t len=usedSpace(in);
   if(!len)
 	return STRETCHBLOC_FAILURE;
@@ -120,14 +120,14 @@ int printDashedStretchBloc(stretchBloc_t *in){
   return STRETCHBLOC_SUCCESS;
 }
 
-int printlnDashedStretchBloc(stretchBloc_t *in){
+int printlnDashedStretchBloc(const stretchBloc_t *in){
   int c=printDashedStretchBloc(in);
   if(c==STRETCHBLOC_SUCCESS)
 	printf("\n");
   return c;
 }
 
-char* sprintStretchBloc(stretchBloc_t *in){
+char* sprintStretchBloc(const stretchBloc_t *in){
   size_t len=usedSpace(in);
   if(!len)
 	return NULL;
@@ -145,7 +145,7 @@ char* sprintStretchBloc(stretchBloc_t *in){
   return out;
 }
 
-int stretchBlocTest(stretchBloc_t *in){
+int stretchBlocTest(const stretchBloc_t *in){
   size_t len=blocLength(in);
   size_t c;
   for(c=0;c<len;++c)
@@ -154,7 +154,7 @@ int stretchBlocTest(stretchBloc_t *in){
   return 0;
 }
 
-int stretchBlocEquals(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocEquals(const stretchBloc_t *a,const stretchBloc_t *b){
   size_t alen=usedSpace(a);
   size_t c=usedSpace(b);
   if(!alen||alen!=c)
@@ -165,11 +165,11 @@ int stretchBlocEquals(stretchBloc_t *a,stretchBloc_t *b){
   return 1;
 }
 
-int stretchBlocNotEqual(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocNotEqual(const stretchBloc_t *a,const stretchBloc_t *b){
   return !stretchBlocEquals(a,b);
 }
 
-int stretchBlocGreaterThan(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocGreaterThan(const stretchBloc_t *a,const stretchBloc_t *b){
   size_t alen=usedSpace(a);
   size_t c=usedSpace(b);
   if(!alen||alen!=c)
@@ -180,7 +180,7 @@ int stretchBlocGreaterThan(stretchBloc_t *a,stretchBloc_t *b){
   return 0;
 }
 
-int stretchBlocLessThan(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocLessThan(const stretchBloc_t *a,const stretchBloc_t *b){
   size_t alen=usedSpace(a);
   size_t c=usedSpace(b);
   if(!alen||alen!=c)
@@ -191,22 +191,22 @@ int stretchBlocLessThan(stretchBloc_t *a,stretchBloc_t *b){
   return 0;
 }
 
-int stretchBlocGreaterThanOrEqual(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocGreaterThanOrEqual(const stretchBloc_t *a,const stretchBloc_t *b){
   return !stretchBlocLessThan(a,b);
 }
 
-int stretchBlocLessThanOrEqual(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocLessThanOrEqual(const stretchBloc_t *a,const stretchBloc_t *b){
   return !stretchBlocGreaterThan(a,b);
 }
 
-inline int inlineStretchBlocLessThanOrEqual(stretchBloc_t *a,stretchBloc_t *b,size_t len){
+inline int inlineStretchBlocLessThanOrEqual(const stretchBloc_t *a,const stretchBloc_t *b,size_t len){
   for(--len;len!=size_t_max;--len)
 	if(a->data[len]!=b->data[len])
 		return a->data[len]<b->data[len];
   return 1;
 }
 
-int stretchBlocPlus(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocPlus(stretchBloc_t *dest,const stretchBloc_t *a,const stretchBloc_t *b){
   size_t alen=usedSpace(a);
   size_t blen=usedSpace(b);
   if(!dest||!alen||!blen)
@@ -248,7 +248,7 @@ int stretchBlocPlus(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
   return STRETCHBLOC_SUCCESS;
 }
 
-int stretchBlocMinus(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocMinus(stretchBloc_t *dest,const stretchBloc_t *a,const stretchBloc_t *b){
   size_t alen=usedSpace(a);
   size_t blen=usedSpace(b);
   if(!alen||!blen)
@@ -278,7 +278,7 @@ int stretchBlocMinus(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
   return STRETCHBLOC_SUCCESS;
 }
 
-int stretchBlocTimes(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocTimes(stretchBloc_t *dest,const stretchBloc_t *a,const stretchBloc_t *b){
   size_t alen=usedSpace(a);
   size_t blen=usedSpace(b);
   if(!alen||!blen)
@@ -287,15 +287,19 @@ int stretchBlocTimes(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
   return STRETCHBLOC_FAILURE;
 }
 
-int stretchBlocDividedBy(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b,stretchBloc_t *rem){
+int stretchBlocDividedBy(stretchBloc_t *dest,const stretchBloc_t *a,const stretchBloc_t *b){
   return 0;
 }
 
-int stretchBlocRemainder(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b,stretchBloc_t *quo){
+int stretchBlocRemainder(stretchBloc_t *dest,const stretchBloc_t *a,const stretchBloc_t *b){
   return 0;
 }
 
-int stretchBlocLeftShiftOne(stretchBloc_t *dest,stretchBloc_t *in){
+int stretchBlocDivideRemainder(stretchBloc_t *quo,stretchBloc_t *rem,const stretchBloc_t *a,const stretchBloc_t *b){
+  return 0;	
+}
+
+int stretchBlocLeftShiftOne(stretchBloc_t *dest,const stretchBloc_t *in){
   size_t len=usedSpace(in);
   if(!len)
 	return STRETCHBLOC_FAILURE;
@@ -317,7 +321,7 @@ int stretchBlocLeftShiftOne(stretchBloc_t *dest,stretchBloc_t *in){
   return STRETCHBLOC_SUCCESS;
 }
 
-int stretchBlocRightShiftOne(stretchBloc_t *dest,stretchBloc_t *in){
+int stretchBlocRightShiftOne(stretchBloc_t *dest,const stretchBloc_t *in){
   size_t len=usedSpace(in);
   if(!len)
 	return STRETCHBLOC_FAILURE;
@@ -336,15 +340,15 @@ int stretchBlocRightShiftOne(stretchBloc_t *dest,stretchBloc_t *in){
   return STRETCHBLOC_SUCCESS;
 }
 
-int stretchBlocLeftShift(stretchBloc_t *dest,stretchBloc_t *in,size_t shamt){
+int stretchBlocLeftShift(stretchBloc_t *dest,const stretchBloc_t *in,size_t shamt){
   return 0;
 }
 
-int stretchBlocRightShift(stretchBloc_t *dest,stretchBloc_t *in,size_t shamt){
+int stretchBlocRightShift(stretchBloc_t *dest,const stretchBloc_t *in,size_t shamt){
   return 0;
 }
 
-int stretchBlocAnd(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocAnd(stretchBloc_t *dest,const stretchBloc_t *a,const stretchBloc_t *b){
   size_t alen=usedSpace(a);
   size_t blen=usedSpace(b);
   if(!alen||!blen)
@@ -358,7 +362,7 @@ int stretchBlocAnd(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
   return STRETCHBLOC_SUCCESS;
 }
 
-int stretchBlocOr(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){ 
+int stretchBlocOr(stretchBloc_t *dest,const stretchBloc_t *a,const stretchBloc_t *b){ 
   size_t alen=usedSpace(a);
   size_t blen=usedSpace(b);
   if(!alen||!blen)
@@ -381,7 +385,7 @@ int stretchBlocOr(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
   return STRETCHBLOC_SUCCESS;
 }
 
-int stretchBlocXor(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocXor(stretchBloc_t *dest,const stretchBloc_t *a,const stretchBloc_t *b){
   size_t alen=usedSpace(a);
   size_t blen=usedSpace(b);
   if(!alen||!blen)
@@ -404,11 +408,11 @@ int stretchBlocXor(stretchBloc_t *dest,stretchBloc_t *a,stretchBloc_t *b){
   return STRETCHBLOC_SUCCESS;
 }
 
-int stretchBlocPower(stretchBloc_t *dest,stretchBloc_t *in,size_t pow){
+int stretchBlocPower(stretchBloc_t *dest,const stretchBloc_t *in,size_t pow){
   return 0;
 }
 
-int stretchBlocPOWER(stretchBloc_t *dest,stretchBloc_t *in,stretchBloc_t *pow){
+int stretchBlocPOWER(stretchBloc_t *dest,const stretchBloc_t *in,stretchBloc_t *pow){
   return 0;
 }
 
@@ -442,7 +446,7 @@ int stretchBlocMinusMinus(stretchBloc_t *in){
   return STRETCHBLOC_SUCCESS;
 }
 
-int stretchBlocPlusEquals(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocPlusEquals(stretchBloc_t *a,const stretchBloc_t *b){
   size_t alen=blocLength(a); //We're concerned with the whole size of a
   size_t blen=usedSpace(b); //But only the utilized portion of b
   if(!alen||!blen)
@@ -482,19 +486,19 @@ int stretchBlocPlusEquals(stretchBloc_t *a,stretchBloc_t *b){
   return STRETCHBLOC_SUCCESS;
 }
 
-int stretchBlocMinusEquals(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocMinusEquals(stretchBloc_t *a,const stretchBloc_t *b){
   return 0;
 }
 
-int stretchBlocTimesEquals(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocTimesEquals(stretchBloc_t *a,const stretchBloc_t *b){
   return 0;
 }
 
-int stretchBlocDividedByEquals(stretchBloc_t *a,stretchBloc_t *b,stretchBloc_t *rem){
+int stretchBlocDividedByEquals(stretchBloc_t *a,const stretchBloc_t *b,stretchBloc_t *rem){
   return 0;
 }
 
-int stretchBlocRemainderEquals(stretchBloc_t *a,stretchBloc_t *b,stretchBloc_t *quo){
+int stretchBlocRemainderEquals(stretchBloc_t *a,const stretchBloc_t *b,stretchBloc_t *quo){
   return 0;
 }
 
@@ -514,15 +518,15 @@ int stretchBlocRightShiftEquals(stretchBloc_t *in,size_t shamt){
   return 0;
 }
 
-int stretchBlocAndEquals(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocAndEquals(stretchBloc_t *a,const stretchBloc_t *b){
   return 0;
 }
 
-int stretchBlocOrEquals(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocOrEquals(stretchBloc_t *a,const stretchBloc_t *b){
   return 0;
 }
 
-int stretchBlocXorEquals(stretchBloc_t *a,stretchBloc_t *b){
+int stretchBlocXorEquals(stretchBloc_t *a,const stretchBloc_t *b){
  return 0;
 }
 
@@ -530,7 +534,7 @@ int stretchBlocPowerEquals(stretchBloc_t *in,size_t pow){
   return 0;
 }
 
-int stretchBlocPOWEREquals(stretchBloc_t *in,stretchBloc_t *pow){
+int stretchBlocPOWEREquals(stretchBloc_t *in,const stretchBloc_t *pow){
   return 0;
 }
 
