@@ -107,7 +107,7 @@ int stretchBlocLeftShiftEqualsOne(stretchBloc_t*); //shifts the value left by on
 int stretchBlocRightShiftEqualsOne(stretchBloc_t*); //shifts the value right logically by one
 int stretchBlocLeftShiftEquals(stretchBloc_t*,size_t); //shifts the value left by input
 int stretchBlocRightShiftEquals(stretchBloc_t*,size_t); //shifts the value right logically by the input
-int stretchBlocAndEquals(stretchBloc_t*const ,stretchBloc_t*); //sets the value of the first to the bitwise and of the two
+int stretchBlocAndEquals(stretchBloc_t*,const stretchBloc_t*); //sets the value of the first to the bitwise and of the two
 int stretchBlocOrEquals(stretchBloc_t*,const stretchBloc_t*); //sets the value of the first to the bitwise or of the two
 int stretchBlocXorEquals(stretchBloc_t*,const stretchBloc_t*); //sets the value of thefirst to the bitwise xor of the two
 int stretchBlocPowerEquals(stretchBloc_t*,size_t); //sets the value of the first to the first to the power of the second

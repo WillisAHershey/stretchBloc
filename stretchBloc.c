@@ -412,7 +412,7 @@ int stretchBlocPower(stretchBloc_t *dest,const stretchBloc_t *in,size_t pow){
   return 0;
 }
 
-int stretchBlocPOWER(stretchBloc_t *dest,const stretchBloc_t *in,stretchBloc_t *pow){
+int stretchBlocPOWER(stretchBloc_t *dest,const stretchBloc_t *in,const stretchBloc_t *pow){
   return 0;
 }
 
