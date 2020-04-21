@@ -58,58 +58,59 @@ char* stretchBlocToString(stretchBloc_t*,int); //Returns string representing val
 
 //PURE INITIALIZATION FUNCTIONS
 int stretchBlocInit(stretchBloc_t*); //Initializes new stretchBloc to zero in the given location
-int copyStretchBloc(stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc in given location to value of given stretchBloc
+int copyStretchBloc(stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc in given location to value of given stretchBloc
 int newStretchBloc(stretchBloc_t*,longtype); //Initializes new stretchBloc in given location with value of given longtype
 int stringToStretchBloc(stretchBloc_t*,char*); //Initializes new stretchBloc in given locations with value from null terminated (numerical c-standard) string
 int randomStretchBloc(stretchBloc_t*,size_t); //Initializes new stretchBloc in given location with input number of randomly generated longtypes
 //DESTRUCTOR FUNCTIONS
 int deleteStretchBloc(stretchBloc_t*); //Frees the memory allocated by this library for any valid stretchBloc
 //HEXADECIMAL PRINTING FUNCTIONS
-int printStretchBloc(stretchBloc_t*); //prints value of stretchBloc to stdout in hexadecimal
-int printlnStretchBloc(stretchBloc_t*); //prints value of stretchBloc to stdout with newline
-int printDashedStretchBloc(stretchBloc_t*); //prints value of stretchBloc to stdout with dashes between longs
-int printlnDashedStretchBloc(stretchBloc_t*); //prints value of stretchBloc to stdout with dashes between longs and a newline
-char* sprintStretchBloc(stretchBloc_t*);
+int printStretchBloc(const stretchBloc_t*); //prints value of stretchBloc to stdout in hexadecimal
+int printlnStretchBloc(const stretchBloc_t*); //prints value of stretchBloc to stdout with newline
+int printDashedStretchBloc(const stretchBloc_t*); //prints value of stretchBloc to stdout with dashes between longs
+int printlnDashedStretchBloc(const stretchBloc_t*); //prints value of stretchBloc to stdout with dashes between longs and a newline
+char* sprintStretchBloc(const stretchBloc_t*);
 //BOOLEAN FUNCTIONS
-int stretchBlocTest(stretchBloc_t*); //returns 1 if nonzero value and 0 otherwise (Functions as boolean test for value)
-int stretchBlocEquals(stretchBloc_t*,stretchBloc_t*); //returns 1 if the two stretchBlocs have equivalent values
-int stretchBlocNotEqual(stretchBloc_t*,stretchBloc_t*); //returns 1 if the two stretchBlocs have different values
-int stretchBlocGreaterThan(stretchBloc_t*,stretchBloc_t*); //returns 1 if the first stretchBloc has a greater value than the second
-int stretchBlocLessThan(stretchBloc_t*,stretchBloc_t*); //returns 1 if the first stretchBloc has a lesser value than the second
-int stretchBlocGreaterThanOrEqual(stretchBloc_t*,stretchBloc_t*); //returns 1 if the first stretchBloc has a greater or equal value than the second
-int stretchBlocLessThanOrEqual(stretchBloc_t*,stretchBloc_t*); //returns 1 if the first stretchBloc has a lesser or equal value than the second
+int stretchBlocTest(const stretchBloc_t*); //returns 1 if nonzero value and 0 otherwise (Functions as boolean test for value)
+int stretchBlocEquals(const stretchBloc_t*,const stretchBloc_t*); //returns 1 if the two stretchBlocs have equivalent values
+int stretchBlocNotEqual(const stretchBloc_t*,const stretchBloc_t*); //returns 1 if the two stretchBlocs have different values
+int stretchBlocGreaterThan(const stretchBloc_t*,const stretchBloc_t*); //returns 1 if the first stretchBloc has a greater value than the second
+int stretchBlocLessThan(const stretchBloc_t*,const stretchBloc_t*); //returns 1 if the first stretchBloc has a lesser value than the second
+int stretchBlocGreaterThanOrEqual(const stretchBloc_t*,const stretchBloc_t*); //returns 1 if the first stretchBloc has a greater or equal value than the second
+int stretchBlocLessThanOrEqual(const stretchBloc_t*,const stretchBloc_t*); //returns 1 if the first stretchBloc has a lesser or equal value than the second
 //MATHEMATICAL INITIALIZATION FUNCTIONS
-int stretchBlocPlus(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of sum of input values
-int stretchBlocMinus(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of difference of input values, or zero if negative
-int stretchBlocTimes(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of product of input values
-int stretchBlocDividedBy(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of quotient of input values*
-int stretchBlocRemainder(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of remainder of division*
-int stretchBlocLeftShiftOne(stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of input left shifted one place
-int stretchBlocRightShiftOne(stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of input logically right shifted one place
-int stretchBlocLeftShift(stretchBloc_t*,stretchBloc_t*,size_t); //Initializes new stretchBloc with value of input left shifted input places
-int stretchBlocRightShift(stretchBloc_t*,stretchBloc_t*,size_t); //Initializes new stretchBloc with value of input right shifted logically input places
-int stretchBlocAnd(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of bitwise and of inputs
-int stretchBlocOr(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of bitwise or of inputs
-int stretchBlocXor(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of bitwise xor of inputs
-int stretchBlocPower(stretchBloc_t*,stretchBloc_t*,size_t); //Initializes new stretchBloc with value of input to the power of longtype input
-int stretchBlocPOWER(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //Initializes new stretchBloc with value of input to the power of stretchBloc input
+int stretchBlocPlus(stretchBloc_t*,const stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of sum of input values
+int stretchBlocMinus(stretchBloc_t*,const stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of difference of input values, or zero if negative
+int stretchBlocTimes(stretchBloc_t*,const stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of product of input values
+int stretchBlocDividedBy(stretchBloc_t*,const stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of quotient of input values*
+int stretchBlocRemainder(stretchBloc_t*,const stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of remainder of division*
+int stretchBlocDivideRemainder(stretchBloc_t*,stretchBloc_t*,const stretchBloc_t*,const stretchBloc_t*);
+int stretchBlocLeftShiftOne(stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of input left shifted one place
+int stretchBlocRightShiftOne(stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of input logically right shifted one place
+int stretchBlocLeftShift(stretchBloc_t*,const stretchBloc_t*,size_t); //Initializes new stretchBloc with value of input left shifted input places
+int stretchBlocRightShift(stretchBloc_t*,const stretchBloc_t*,size_t); //Initializes new stretchBloc with value of input right shifted logically input places
+int stretchBlocAnd(stretchBloc_t*,const stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of bitwise and of inputs
+int stretchBlocOr(stretchBloc_t*,const stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of bitwise or of inputs
+int stretchBlocXor(stretchBloc_t*,const stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of bitwise xor of inputs
+int stretchBlocPower(stretchBloc_t*,const stretchBloc_t*,size_t); //Initializes new stretchBloc with value of input to the power of longtype input
+int stretchBlocPOWER(stretchBloc_t*,const stretchBloc_t*,const stretchBloc_t*); //Initializes new stretchBloc with value of input to the power of stretchBloc input
 //* dividedBy and remainder also accept an extra pointer where, if not null, the remainder or divisor (respectively) will be stored, as it is computed as a byproduct
 //MUTATOR FUNCTIONS
 int stretchBlocPlusPlus(stretchBloc_t*); //increments value of input by one
 int stretchBlocMinusMinus(stretchBloc_t*); //decrements value of input by one
-int stretchBlocPlusEquals(stretchBloc_t*,stretchBloc_t*); //increments value of first by value of second
-int stretchBlocMinusEquals(stretchBloc_t*,stretchBloc_t*); //decrements value of first by value of second, will set to zero if difference is negative
-int stretchBlocTimesEquals(stretchBloc_t*,stretchBloc_t*); //sets value of first to the product of the two values
-int stretchBlocDividedByEquals(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //sets value of first to the quotient of the first and second
-int stretchBlocRemainderEquals(stretchBloc_t*,stretchBloc_t*,stretchBloc_t*); //sets value of first to the remainder of division of the fisrt and second
+int stretchBlocPlusEquals(stretchBloc_t*,const stretchBloc_t*); //increments value of first by value of second
+int stretchBlocMinusEquals(stretchBloc_t*,const stretchBloc_t*); //decrements value of first by value of second, will set to zero if difference is negative
+int stretchBlocTimesEquals(stretchBloc_t*,const stretchBloc_t*); //sets value of first to the product of the two values
+int stretchBlocDividedByEquals(stretchBloc_t*,const stretchBloc_t*,stretchBloc_t*); //sets value of first to the quotient of the first and second
+int stretchBlocRemainderEquals(stretchBloc_t*,const stretchBloc_t*,stretchBloc_t*); //sets value of first to the remainder of division of the fisrt and second
 int stretchBlocLeftShiftEqualsOne(stretchBloc_t*); //shifts the value left by one
 int stretchBlocRightShiftEqualsOne(stretchBloc_t*); //shifts the value right logically by one
 int stretchBlocLeftShiftEquals(stretchBloc_t*,size_t); //shifts the value left by input
 int stretchBlocRightShiftEquals(stretchBloc_t*,size_t); //shifts the value right logically by the input
-int stretchBlocAndEquals(stretchBloc_t*,stretchBloc_t*); //sets the value of the first to the bitwise and of the two
-int stretchBlocOrEquals(stretchBloc_t*,stretchBloc_t*); //sets the value of the first to the bitwise or of the two
-int stretchBlocXorEquals(stretchBloc_t*,stretchBloc_t*); //sets the value of thefirst to the bitwise xor of the two
+int stretchBlocAndEquals(stretchBloc_t*const ,stretchBloc_t*); //sets the value of the first to the bitwise and of the two
+int stretchBlocOrEquals(stretchBloc_t*,const stretchBloc_t*); //sets the value of the first to the bitwise or of the two
+int stretchBlocXorEquals(stretchBloc_t*,const stretchBloc_t*); //sets the value of thefirst to the bitwise xor of the two
 int stretchBlocPowerEquals(stretchBloc_t*,size_t); //sets the value of the first to the first to the power of the second
-int stretchBlocPOWEREquals(stretchBloc_t*,stretchBloc_t*); //sets the value of the first to the first to the power of the second
+int stretchBlocPOWEREquals(stretchBloc_t*,const stretchBloc_t*); //sets the value of the first to the first to the power of the second
 
 #endif
