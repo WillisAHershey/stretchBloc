@@ -1,9 +1,9 @@
 #include "stretchBloc.h"
 
 static inline size_t blocLength(const stretchBloc *in){
-  if(!in||!in->data)
+  if(!in)
 	return 0;
-  return malloc_usable_size(in->data)/LONGBYTES;
+  return in->numLongs;
 }
 
 static inline size_t usedSpace(const stretchBloc *in){
@@ -22,22 +22,17 @@ static inline int mallocStretchBloc(stretchBloc *dest,size_t in){
   LONGTYPE *pt=malloc(in*LONGBYTES);
   if(!pt)
 	return STRETCHBLOC_FAILURE;
-  memset(&pt[in],0,malloc_usable_size(pt)-in*LONGBYTES);
-  dest->data=pt;
+  *dest=(stretchBloc){.data=pt,.numLongs=in};
   return STRETCHBLOC_SUCCESS;
 }
 
 static inline int reallocStretchBloc(stretchBloc *in,size_t size){
-  size_t oldLen;
-  if(!size||!(oldLen=blocLength(in)))
+  if(!in)
 	return STRETCHBLOC_FAILURE;
-  if(size==oldLen)
-	return STRETCHBLOC_SUCCESS;
   LONGTYPE *pt=realloc(in->data,size*LONGBYTES);
   if(!pt)
 	return STRETCHBLOC_FAILURE;
-  memset(&pt[size],0,malloc_usable_size(pt)-size*LONGBYTES);
-  in->data=pt;
+  *in=(stretchBloc){.data=pt,.numLongs=size};
   return STRETCHBLOC_SUCCESS;
 }
 
@@ -50,7 +45,7 @@ int stretchBlocInit(stretchBloc *dest){
 
 int copyStretchBloc(stretchBloc *dest,const stretchBloc *in){
   size_t len=usedSpace(in);
-  if(!len||!dest||mallocStretchBloc(dest,len)==STRETCHBLOC_FAILURE)
+  if(mallocStretchBloc(dest,len)==STRETCHBLOC_FAILURE)
 	return STRETCHBLOC_FAILURE;
   memcpy(dest->data,in->data,len*LONGBYTES);
   return STRETCHBLOC_SUCCESS;
@@ -69,7 +64,7 @@ int stringToStretchBloc(stretchBloc *dest,char *string){
 
 static inline LONGTYPE randomLongtype(){
 //This function assumes RAND_MAX is some power of 2 minus 1 (0xFFF... 0x7FFF... 0x3FFF... etc.)
-//If this is not the case, the results will not be truly random.
+//If this is not the case, the results will not be very random.
   static int seed=0;
   static LONGTYPE leftovers=0;
   static int num=0;

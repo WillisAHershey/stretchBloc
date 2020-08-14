@@ -3,14 +3,13 @@
 //This file defines a type, stretchBloc, which represents an unsigned integer of effectively no maximum size, as well as a library of functions to 
 //perform mathematical operations on and between them
 
-#ifndef STRETCH_BLOC //pragma once
+#ifndef STRETCH_BLOC
 #define STRETCH_BLOC
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
 #include <limits.h>
-#include <malloc.h>
 #include <string.h>
 #include <time.h>
 
@@ -22,16 +21,17 @@
 #define STRETCHBLOC_SUCCESS 1
 #define STRETCHBLOC_FAILURE 0
 
-#define SIZE_T_MAX (~((size_t)0)) //size_ts are tricky in for loops when you count down (beacuse of their unsignedness), so I saved myself some trouble here
+#define SIZE_T_MAX (((size_t)0)-1) //size_ts are tricky in for loops when you count down (beacuse of their unsignedness), so I saved myself some trouble here
 #define LONGBYTES sizeof(LONGTYPE)
 #define LONGBITS (LONGBYTES*8)
 
 #define PARTPRINT PRIXFAST32
 #define WHOLEPRINT "0*"PRIXFAST32
 
-typedef struct{ //It's essentially a double pointer to a block of unsigned longs, so the block of longs can be moved, and all references to the stretchBloc
-  LONGTYPE *data;           //will remain valid as long as the pointer is updated, which is done automatically in the functions where that is necessary.
-}stretchBloc;       //This code will not malloc(sizeof(stretchBloc)) for you, so if you do not put one on the stack, it is your job to free it.
+typedef struct{
+  LONGTYPE *data;
+  size_t numLongs;
+}stretchBloc;
 
 char* stretchBlocToString(stretchBloc*,int); //Returns string representing value in given base. Memory for string is malloced and must be freed.
 
