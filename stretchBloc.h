@@ -18,8 +18,8 @@
 #define LONGTYPE_MAX UINT_FAST32_MAX
 
 //STRETCHBLOC_SUCCESS and STRETCHBLOC_FAILURE are the standard return for all of the int type functions
-#define STRETCHBLOC_SUCCESS 1
-#define STRETCHBLOC_FAILURE 0
+#define STRETCHBLOC_SUCCESS 0
+#define STRETCHBLOC_FAILURE -1
 
 #define SIZE_T_MAX (((size_t)0)-1) //size_ts are tricky in for loops when you count down (beacuse of their unsignedness), so I saved myself some trouble here
 #define LONGBYTES sizeof(LONGTYPE)

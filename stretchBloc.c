@@ -6,7 +6,7 @@ static inline size_t blocLength(const stretchBloc *in){
   return in->numLongs;
 }
 
-static inline size_t usedSpace(const stretchBloc *in){
+/*static inline size_t usedSpace(const stretchBloc *in){
   size_t len=blocLength(in);
   if(!len)
 	return 0;
@@ -14,7 +14,9 @@ static inline size_t usedSpace(const stretchBloc *in){
 	if(in->data[len])
 		return len+1;
   return len+1;
-}
+}*/
+
+#define usedSpace(c) blocLength(c)
 
 static inline int mallocStretchBloc(stretchBloc *dest,size_t in){
   if(!in||!dest)
@@ -104,6 +106,7 @@ int deleteStretchBloc(stretchBloc *in){
   if(!in||!in->data)
 	return STRETCHBLOC_FAILURE;
   free(in->data);
+  *in=(stretchBloc){.data=NULL,.numLongs=0};
   return STRETCHBLOC_SUCCESS;
 }
 
@@ -170,10 +173,9 @@ _Bool stretchBlocTest(const stretchBloc *in){
 
 _Bool stretchBlocEquals(const stretchBloc *a,const stretchBloc *b){
   size_t alen=usedSpace(a);
-  size_t c=usedSpace(b);
-  if(!alen||alen!=c)
+  if(!alen||alen!=usedSpace(b))
 	return 0;
-  for(c=0;c<alen;++c)
+  for(size_t c=0;c<alen;++c)
 	if(a->data[c]!=b->data[c])
 		return 0;
   return 1;
@@ -213,7 +215,7 @@ _Bool stretchBlocLessThanOrEqual(const stretchBloc *a,const stretchBloc *b){
   return !stretchBlocGreaterThan(a,b);
 }
 
-inline int inlineStretchBlocLessThanOrEqual(const stretchBloc *a,const stretchBloc *b,size_t len){
+static inline int inlineStretchBlocLessThanOrEqual(const stretchBloc *a,const stretchBloc *b,size_t len){
   for(--len;len!=SIZE_T_MAX;--len)
 	if(a->data[len]!=b->data[len])
 		return a->data[len]<b->data[len];
@@ -230,7 +232,7 @@ int stretchBlocPlus(stretchBloc *dest,const stretchBloc *a,const stretchBloc *b)
   if(mallocStretchBloc(dest,olen)==STRETCHBLOC_FAILURE)
 	return STRETCHBLOC_FAILURE;
   size_t c;
-  LONGTYPE carry=0;
+  _Bool carry=0;
   for(c=0;c<slen;++c){
 	dest->data[c]=a->data[c]+b->data[c]+carry;
 	carry=dest->data[c]<a->data[c]||(carry&&dest->data[c]==a->data[c]);
@@ -239,24 +241,23 @@ int stretchBlocPlus(stretchBloc *dest,const stretchBloc *a,const stretchBloc *b)
 	;
   else if(c==blen){
 	for(;carry&&c<alen;++c){
-		dest->data[c]=a->data[c]+carry;
+		dest->data[c]=a->data[c]+1;
 		carry=dest->data[c]==0;
 	}
-	for(;c<alen;++c)
-		dest->data[c]=a->data[c];
+	if(c<alen)
+		memcpy(&dest->data[c],&a->data[c],LONGBYTES*(alen-c));
   }
   else{
 	for(;carry&&c<blen;++c){
 		dest->data[c]=b->data[c]+1;
 		carry=dest->data[c]==0;
 	}
-	for(;c<blen;++c)
-		dest->data[c]=b->data[c];
+	if(c<blen)
+		memcpy(&dest->data[c],&b->data[c],LONGBYTES*(blen-c));
   }
   if(carry){
-	if(blocLength(dest)==olen)
-		if(reallocStretchBloc(dest,olen+1)==STRETCHBLOC_FAILURE)
-			return STRETCHBLOC_FAILURE;
+	if(reallocStretchBloc(dest,olen+1)==STRETCHBLOC_FAILURE)
+		return STRETCHBLOC_FAILURE;
 	dest->data[olen]=(LONGTYPE)1;
   }
   return STRETCHBLOC_SUCCESS;
@@ -271,10 +272,10 @@ int stretchBlocMinus(stretchBloc *dest,const stretchBloc *a,const stretchBloc *b
 	return stretchBlocInit(dest);
   if(mallocStretchBloc(dest,alen)==STRETCHBLOC_FAILURE)
 	return STRETCHBLOC_FAILURE;
-  LONGTYPE carry=0;
+  _Bool carry=0;
   size_t c;
   for(c=0;c<blen;++c){
-	dest->data[c]=a->data[c]-b->data[c]-carry;
+	dest->data[c]=a->data[c]-b->data[c]+carry;
 	carry=dest->data[c]>a->data[c]||(carry&&dest->data[c]==a->data[c]);
   }
   if(c==alen)
@@ -282,10 +283,10 @@ int stretchBlocMinus(stretchBloc *dest,const stretchBloc *a,const stretchBloc *b
   else{
 	for(;carry&&c<alen;++c){
 		dest->data[c]=a->data[c]-1;
-		carry=dest->data[c]==~(LONGTYPE)0;
+		carry=dest->data[c]==((LONGTYPE)0)-1;
 	}
-	for(;c<alen;++c)
-		dest->data[c]=a->data[c];
+	if(c<alen)
+		memcpy(&dest->data[c],&a->data[c],LONGBYTES*(alen-c));
   }
   if(!dest->data[alen-1])
 	return reallocStretchBloc(dest,usedSpace(dest));
@@ -295,16 +296,8 @@ int stretchBlocMinus(stretchBloc *dest,const stretchBloc *a,const stretchBloc *b
 int stretchBlocTimes(stretchBloc *dest,const stretchBloc *a,const stretchBloc *b){
   size_t alen=usedSpace(a);
   size_t blen=usedSpace(b);
-  if(!alen||!blen)
+  if(!alen||!blen||!dest)
 	return STRETCHBLOC_FAILURE;
-  if(blen>alen){
-	const stretchBloc *c=b;
-	b=a;
-	a=c;
-	size_t clen=blen;
-	blen=alen;
-	alen=clen;
-  }
   return STRETCHBLOC_FAILURE;
 }
 
@@ -322,7 +315,7 @@ int stretchBlocDivideRemainder(stretchBloc *quo,stretchBloc *rem,const stretchBl
 
 int stretchBlocLeftShiftOne(stretchBloc *dest,const stretchBloc *in){
   size_t len=usedSpace(in);
-  if(!len)
+  if(!len||!dest)
 	return STRETCHBLOC_FAILURE;
   LONGTYPE mask=((LONGTYPE)1)<<(LONGBITS-1);
   if(in->data[len-1]&mask){
@@ -333,11 +326,10 @@ int stretchBlocLeftShiftOne(stretchBloc *dest,const stretchBloc *in){
   else
   	if(mallocStretchBloc(dest,len)==STRETCHBLOC_FAILURE)
 		return STRETCHBLOC_FAILURE;
-  size_t c;
-  LONGTYPE hold=0;
-  for(c=0;c<len;++c){
-	dest->data[c]=(in->data[c]<<1)+hold;
-	hold=(LONGTYPE)((in->data[c]&mask)!=0);
+  _Bool hold=0;
+  for(size_t c=0;c<len;++c){
+	dest->data[c]=(in->data[c]<<1)|hold;
+	hold=in->data[c]&mask;
   }
   return STRETCHBLOC_SUCCESS;
 }
@@ -362,11 +354,45 @@ int stretchBlocRightShiftOne(stretchBloc *dest,const stretchBloc *in){
 }
 
 int stretchBlocLeftShift(stretchBloc *dest,const stretchBloc *in,size_t shamt){
-  return 0;
+  if(!dest||!in)
+	return STRETCHBLOC_FAILURE;
+  if(!shamt)
+	return copyStretchBloc(dest,in);
+  size_t longs=shamt/LONGBITS;
+  size_t shifts=shamt%LONGBITS;
+  size_t len=usedSpace(in);
+  if(shifts&&in->data[len-1]&(~((((LONGTYPE)1)<<(LONGBITS-shifts))-1))){
+	if(mallocStretchBloc(dest,len+longs+1)==STRETCHBLOC_FAILURE)
+		return STRETCHBLOC_FAILURE;
+	dest->data[len+longs]=in->data[len-1]>>(LONGBITS-shifts);
+  }
+  else
+	if(mallocStretchBloc(dest,len+longs)==STRETCHBLOC_FAILURE)
+		return STRETCHBLOC_FAILURE;
+  memset(&dest->data[0],0,LONGBYTES*longs);
+  if(shifts){
+	LONGTYPE hold=0;
+	for(size_t c=0;c<len;++c){
+		dest->data[c+longs]=(in->data[c]<<shifts)|hold;
+		hold=in->data[c]>>(LONGBITS-shifts);
+	}
+  }
+  else
+	memcpy(&dest->data[longs],&in->data[0],LONGBYTES*len);
+  return STRETCHBLOC_SUCCESS;
 }
 
 int stretchBlocRightShift(stretchBloc *dest,const stretchBloc *in,size_t shamt){
-  return 0;
+  if(!dest||!in)
+	return STRETCHBLOC_FAILURE;
+  if(!shamt)
+	return copyStretchBloc(dest,in);
+  size_t longs=shamt/LONGBITS;
+  size_t shifts=shamt%LONGBITS;
+  size_t len=usedSpace(in);
+  if(longs>=len||(longs-len==1&&!(in->data[len-1]>>shifts)))
+	return stretchBlocInit(dest);
+  return STRETCHBLOC_FAILURE;
 }
 
 int stretchBlocAnd(stretchBloc *dest,const stretchBloc *a,const stretchBloc *b){
@@ -524,11 +550,40 @@ int stretchBlocRemainderEquals(stretchBloc *a,const stretchBloc *b,stretchBloc *
 }
 
 int stretchBlocLeftShiftEqualsOne(stretchBloc *in){
-  return 0;
+  size_t len=usedSpace(in);
+  if(!len)
+	return STRETCHBLOC_FAILURE;
+  LONGTYPE mask=((LONGTYPE)1)<<(LONGBITS-1);
+  if(in->data[len-1]&mask){
+	if(reallocStretchBloc(in,len+1)==STRETCHBLOC_FAILURE)
+		return STRETCHBLOC_FAILURE;
+	in->data[len]=(LONGTYPE)0;
+  }
+  for(--len;len!=SIZE_T_MAX;--len){
+	if(in->data[len]&mask)
+		in->data[len+1]|=1;
+	in->data[len]<<=1;
+  }
+  return STRETCHBLOC_SUCCESS;
 }
 
 int stretchBlocRightShiftEqualsOne(stretchBloc *in){
-  return 0;
+  size_t len=usedSpace(in);
+  if(!len)
+	return STRETCHBLOC_FAILURE;
+  LONGTYPE mask=((LONGTYPE)1)<<(LONGBITS-1);
+  for(size_t c=0;c<len-1;++c){
+	in->data[c]>>=1;
+	if(in->data[c+1]&(LONGTYPE)1)
+		in->data[c]|=mask;
+  }
+  if(in->data[len-1]==(LONGTYPE)1){
+	if(reallocStretchBloc(in,len-1)==STRETCHBLOC_FAILURE)
+		return STRETCHBLOC_FAILURE;
+  }
+  else
+  	in->data[len-1]>>=1;
+  return STRETCHBLOC_SUCCESS;
 }
 
 int stretchBlocLeftShiftEquals(stretchBloc *in,size_t shamt){
