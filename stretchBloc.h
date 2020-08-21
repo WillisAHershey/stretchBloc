@@ -53,12 +53,7 @@ int printlnDashedStretchBloc(const stretchBloc*); //prints value of stretchBloc 
 char* sprintStretchBloc(const stretchBloc*);
 //BOOLEAN FUNCTIONS
 _Bool stretchBlocTest(const stretchBloc*); //returns 1 if nonzero value and 0 otherwise (Functions as boolean test for value)
-_Bool stretchBlocEquals(const stretchBloc*,const stretchBloc*); //returns 1 if the two stretchBlocs have equivalent values
-_Bool stretchBlocNotEqual(const stretchBloc*,const stretchBloc*); //returns 1 if the two stretchBlocs have different values
-_Bool stretchBlocGreaterThan(const stretchBloc*,const stretchBloc*); //returns 1 if the first stretchBloc has a greater value than the second
-_Bool stretchBlocLessThan(const stretchBloc*,const stretchBloc*); //returns 1 if the first stretchBloc has a lesser value than the second
-_Bool stretchBlocGreaterThanOrEqual(const stretchBloc*,const stretchBloc*); //returns 1 if the first stretchBloc has a greater or equal value than the second
-_Bool stretchBlocLessThanOrEqual(const stretchBloc*,const stretchBloc*); //returns 1 if the first stretchBloc has a lesser or equal value than the second
+int stretchBlocCompare(const stretchBloc*,const stretchBloc*); //Returns negative value if first is less than second, positive if greater, and zero if equal
 //MATHEMATICAL INITIALIZATION FUNCTIONS
 int stretchBlocPlus(stretchBloc*,const stretchBloc*,const stretchBloc*); //Initializes new stretchBloc with value of sum of input values
 int stretchBlocMinus(stretchBloc*,const stretchBloc*,const stretchBloc*); //Initializes new stretchBloc with value of difference of input values, or zero if negative

@@ -171,48 +171,15 @@ _Bool stretchBlocTest(const stretchBloc *in){
   return 0;
 }
 
-_Bool stretchBlocEquals(const stretchBloc *a,const stretchBloc *b){
+int stretchBlocCompare(const stretchBloc *a,const stretchBloc *b){
   size_t alen=usedSpace(a);
-  if(!alen||alen!=usedSpace(b))
-	return 0;
-  for(size_t c=0;c<alen;++c)
-	if(a->data[c]!=b->data[c])
-		return 0;
-  return 1;
-}
-
-_Bool stretchBlocNotEqual(const stretchBloc *a,const stretchBloc *b){
-  return !stretchBlocEquals(a,b);
-}
-
-_Bool stretchBlocGreaterThan(const stretchBloc *a,const stretchBloc *b){
-  size_t alen=usedSpace(a);
-  size_t c=usedSpace(b);
-  if(!alen||alen!=c)
-	return alen>c;
-  for(c=alen-1;c!=SIZE_T_MAX;--c)
-	if(a->data[c]!=b->data[c])
-		return a->data[c]>b->data[c];
+  size_t blen=usedSpace(b);
+  if(alen!=blen)
+	return alen>blen?1:-1;
+  for(--alen;alen!=SIZE_T_MAX;--alen)
+	if(a->data[alen]!=b->data[alen])
+		return a->data[alen]>b->data[alen]?1:-1;
   return 0;
-}
-
-_Bool stretchBlocLessThan(const stretchBloc *a,const stretchBloc *b){
-  size_t alen=usedSpace(a);
-  size_t c=usedSpace(b);
-  if(!alen||alen!=c)
-	return alen<c;
-  for(c=alen-1;c!=SIZE_T_MAX;--c)
-	if(a->data[c]!=b->data[c])
-		return a->data[c]<b->data[c];
-  return 0;
-}
-
-_Bool stretchBlocGreaterThanOrEqual(const stretchBloc *a,const stretchBloc *b){
-  return !stretchBlocLessThan(a,b);
-}
-
-_Bool stretchBlocLessThanOrEqual(const stretchBloc *a,const stretchBloc *b){
-  return !stretchBlocGreaterThan(a,b);
 }
 
 static inline int inlineStretchBlocLessThanOrEqual(const stretchBloc *a,const stretchBloc *b,size_t len){
